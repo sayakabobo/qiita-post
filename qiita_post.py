@@ -1,7 +1,7 @@
 import requests
 import json
 import datetime
-import os 
+import os
 
 BASE_URL = "https://qiita.com/api/v2/items"
 token = ['ACCSESS_WRITE_TOKEN']
