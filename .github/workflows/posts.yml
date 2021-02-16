@@ -1,6 +1,9 @@
 name: Python package
 
-on: [push]
+on:
+  push:
+    paths:
+      - "article/**"
 
 jobs:
   build:
@@ -20,6 +23,18 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install requests 
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: test
+      - name: qiita post
         run: |
           python3 qiita_post.py "${{ secrets.ACCSESS_WRITE_TOKEN }}"
+      - name: Push auto-fixed files
+        run: |
+          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          if (git diff --shortstat | grep '[0-9]'); then \
+            git add .; \
+            git commit -m "👕 Fixed github-actions"; \
+            git push origin main; \
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
