@@ -6,3 +6,4 @@ Pipfile.lock
 qiita_test.py
 test.py
 qiita_post.copy.py
+.DS_Store
