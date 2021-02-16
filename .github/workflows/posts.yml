@@ -22,11 +22,4 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: test
         run: |
-          python3 test_1.py "${{ secrets.ACCSESS_WRITE_TOKEN }}"
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: without-markdown
-          path: |
-            article
-            !article/**/*.md
+          python3 qiita_post.py "${{ secrets.ACCSESS_WRITE_TOKEN }}"

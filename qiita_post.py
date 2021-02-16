@@ -1,16 +1,22 @@
 import requests
 import json
 import datetime
-import os
+import os 
+import sys
+
+args = sys.argv
+if len(args) > 1:
+  token = args[1]
+else:
+  print("引数が指定されていません")
 
 BASE_URL = "https://qiita.com/api/v2/items"
-token = ['ACCSESS_WRITE_TOKEN']
 
 dt_now = datetime.datetime.now()
 print(str(dt_now.date()))
 
 def file_delete(dir_name, lines_to_delete):
-  file_name = (f"./article/{dir_name}/index.mdx")
+  file_name = (f"article/{dir_name}/index.mdx")
   initial_line = 1
   file_lines = {}
   with open(file_name) as f:
@@ -32,9 +38,9 @@ def file_delete(dir_name, lines_to_delete):
   f.close()
 
 def submit_article(dir_name):
-  with open(f"./article/{dir_name}/config.json") as f:
+  with open(f"article/{dir_name}/config.json") as f:
       conf = f.read()
-  with open(f"./article/{dir_name}/index.md") as f:
+  with open(f"article/{dir_name}/index.md") as f:
       body = f.read()
   headers = {"Authorization": f"Bearer {token}"}
   item = json.loads(conf)
@@ -42,7 +48,7 @@ def submit_article(dir_name):
 
   if item["id"] == "":
       res = requests.post(BASE_URL, headers=headers, json=item)
-      with open(f"./article/{dir_name}/config.json", "w") as f:
+      with open(f"article/{dir_name}/config.json", "w") as f:
           item["id"] = res.json()["id"]
           item["body"] = ""
           f.write(json.dumps(item))
