@@ -1,9 +1,25 @@
-name: Hello, World!
-on: push
+name: Python package
+
+on: [push]
 
 jobs:
   build:
-    name: Greeting
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Hello, World!"
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          # セマンティックバージョン範囲構文もしくは厳密なPythonのバージョン
+          python-version: "3.x"
+          # オプション - x64もしくはx86アーキテクチャ、デフォルトはx64
+          architecture: "x64"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install requests 
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: test
+        run: |
+          python3 test_1.py
