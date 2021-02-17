@@ -17,26 +17,27 @@ dt_now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 print(str(dt_now.date()))
 
 def file_delete(dir_name, lines_to_delete):
-  file_name = (f"article/{dir_name}/index.mdx")
-  initial_line = 1
-  file_lines = {}
-  with open(file_name) as f:
-    content = f.readlines() 
-  for line in content:
-    file_lines[initial_line] = line.strip()
-    initial_line += 1
+  if os.path.isfile(f"article/{dir_name}/index.mdx"):
+    file_name = (f"article/{dir_name}/index.mdx")
+    initial_line = 1
+    file_lines = {}
+    with open(file_name) as f:
+      content = f.readlines() 
+    for line in content:
+      file_lines[initial_line] = line.strip()
+      initial_line += 1
 
-  line_to_delete = lines_to_delete + 1
-  for i in range(1, line_to_delete):
-    file_lines.pop(i)
+    line_to_delete = lines_to_delete + 1
+    for i in range(1, line_to_delete):
+      file_lines.pop(i)
 
-  ex = os.path.splitext(file_name)
-  output_filename = ex[0] + '.md'
+    ex = os.path.splitext(file_name)
+    output_filename = ex[0] + '.md'
 
-  f = open(output_filename, "w")
-  for line_number, line_content in file_lines.items():
-    f.write('{}\n'.format(line_content))
-  f.close()
+    f = open(output_filename, "w")
+    for line_number, line_content in file_lines.items():
+      f.write('{}\n'.format(line_content))
+    f.close()
 
 def submit_article(dir_name):
   with open(f"article/{dir_name}/config.json") as f:
@@ -71,3 +72,4 @@ if __name__ == "__main__":
   print(res["title"], res["url"])
   print("==========================================================")
   print("投稿しました")
+  os.remove(f"article/{dir_name}/index.mdx")
