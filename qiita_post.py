@@ -3,6 +3,7 @@ import json
 import datetime
 import os 
 import sys
+import pytz
 
 args = sys.argv
 if len(args) > 1:
@@ -12,7 +13,7 @@ else:
 
 BASE_URL = "https://qiita.com/api/v2/items"
 
-dt_now = datetime.datetime.now()
+dt_now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 print(str(dt_now.date()))
 
 def file_delete(dir_name, lines_to_delete):
